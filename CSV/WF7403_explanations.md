@@ -1,4 +1,4 @@
-'''bash
+'''
 # WF: Workflow
 #   WF740301: catalog creation part
 # SS: Software Step
@@ -68,18 +68,47 @@ Remark: Do we need an extra Step to Up- & Download Data from SDL?
 # WF: Workflow
 #   WF740302: rapid response part
 # SS: Software Step
-#   SS7401: SeisSol 
+#   SS??: https://github.com/marcmath/download_TABOO_waveforms
+#   SS??: https://github.com/NicoSchlw/search_SeisSol_ensemble
 # ST: Simulation Step (following gitlab entries)
-#   ST740301 is currently Link to SDL AltoTiberina_Inputs (would actually be a DT)
-#   ST740302 Assemble Input Parameters and Slurm Files (uses SeisSol_ParamStudies)
-#   ST740303 Postprocessing of Catalog Data uses SeisSol_Postprocessing
-#   ST74030302 Uploading of Catalog Data to the SDL
+#   ST74030401 detect event
+#   ST74030402 download Taboo waveforms
+#   ST740305 Find closest match
 # DT: Data
-#   DT7406 SDL AltoTiberina_Inputs (change?)
 #   DT7407 SDL AltoTiberina_Catalog
-# catalog creation part produces catalog that is needed for rapid-response-part
-WF740301 input to WF740302
+#   DT7408 dowloaded waveforms
+#   DT7409 closest match
 '''
+
+ST74030401:
+# detect event
+  Software: 
+    detect_event.py
+  Input:
+    Current time
+  Output:
+    Event_time
+
+ST74030402:
+# download waveforms
+  Software: 
+    download_TABOO_waveforms.py
+  Input:
+    Event_time
+  Output:
+    DT7408 dowloaded waveforms
+
+ST740305:
+# Find closest match
+  Software:
+    search_SeisSol_ensemble.py
+  Input:
+    Event_time
+    DT7408 downloaded waveforms
+    DT7407 SDL AltoTiberina_Catalog
+  Output:
+    DT7409 closest match
+
 
 
 '''bash
