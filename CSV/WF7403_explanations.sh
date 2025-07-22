@@ -1,4 +1,3 @@
-'''
 # WF: Workflow
 #   WF740301: catalog creation part
 # SS: Software Step
@@ -64,7 +63,7 @@ ST740303:
 Remark: Do we need an extra Step to Up- & Download Data from SDL?
     
 
-'''bash
+
 # WF: Workflow
 #   WF740302: rapid response part
 # SS: Software Step
@@ -78,7 +77,7 @@ Remark: Do we need an extra Step to Up- & Download Data from SDL?
 #   DT7407 SDL AltoTiberina_Catalog
 #   DT7408 dowloaded waveforms
 #   DT7409 closest match
-'''
+
 
 ST74030401:
 # detect event
@@ -111,6 +110,5 @@ ST740305:
 
 
 
-'''bash
 WF740301 input to WF740302
-'''
+
