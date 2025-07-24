@@ -38,7 +38,7 @@ Step ST740301:
 ST740302
 
 Step ST740302:
-  Use SeisSol to run the full catalog
+  Use SeisSol to generate catalog entries
   Software SS7401:
     SeisSol 
   Input:
