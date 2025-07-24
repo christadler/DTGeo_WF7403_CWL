@@ -56,17 +56,94 @@ outputs:
 
 steps:
   ST740301:
-    doc: "Input of rupture forecast data and constraints."
+    doc: "Use CSV File to build directory with input files."
     in:
-      InputData: DT7406
+      InputData: DT740601 #CSV File
     run:
       class: Operation
       inputs:
+          InputData: File
+      outputs:
+          SeisSolInputFiles: Directory
+    out:
+      - SeisSolInputFiles
+
+  ST740302:
+    doc: "Use SeisSol to generate catalog entries."
+    in:
+      SeisSolInputFiles: ST740301/SeisSolInputFiles #Output from step before
+      MeshAsagi: DT740603                           #SDL AltoTiberina_Inputs (mesh+asagi)
+    run:
+      class: Operation             #Use SeisSol with slurm scripts
+      inputs:
+          SeisSolInputFiles: Directory
+          MeshAsagi: Directory
+      outputs:
+          FullSeisSolOutput: Directory
+    out:
+      - FullSeisSolOutput
+
+
+  ST740303:
+    doc: "Postprocessing of Outputs."
+    in:
+      FullSeisSolOutput: ST740302/FullSeisSolOutput #Output from step before
+    run:
+      class: Operation             #Use Postprocessing script and prepare Upload for SDL
+      inputs:
+          FullSeisSolOutput: Directory
+      outputs:
+          SDL_AltoTiberina_Catalog: Directory
+    out:
+      - SDL_AltoTiberina_Catalog
+
+# We probably need an extra step for uploading the data to the SDL
+
+ ST74030401:
+    doc: "Detect Event."
+    in: #no input data (only current time needed)
+    run:
+      class: Operation             #detect_event.py
+      inputs:
           InputData: Directory
       outputs:
-          PreprocessedData: Directory
+          Event_time: String
     out:
-      - PreprocessedData
+      - Event_time
+
+ ST74030402:
+    doc: "Download Waveforms."
+    in:
+      Event_time: ST74030401/Event_time    #Event_time
+    run:
+      class: Operation             #download_TABOO_waveforms.py
+      inputs:
+          InputData: Directory
+      outputs:
+          Waveforms: Directory
+    out:
+      - Waveforms
+
+
+ ST740305:
+    doc: "Find closest match."
+    in:
+      AT_Catalog: DT740702               #SDL AltoTiberina_Catalog
+      Event_time: ST74030401/Event_time  #Event_time
+      Waveforms: ST74030402/Waveforms    #Downloaded Waveforms
+    run:
+      class: Operation             #search_SeisSol_ensemble.py
+      inputs:
+          AT_Catalog: Directory
+          Event_time: String       # Date?
+          Waveforms: Directory
+      outputs:
+          SDL_AltoTiberina_Catalog: Directory
+    out:
+      - SDL_AltoTiberina_Catalog
+
+
+---- above new, below old ---
 
   ST740302:
     doc: "Forward dynamic rupture simulations."
@@ -91,30 +168,7 @@ steps:
               SimulatedRupture: Directory
           out:
             - SimulatedRupture
-        SS7405:
-          doc: "SPECFEM3D: Seismic wavepropagation in different coordinate systems."
-          in:
-            PreprocessedData: PreprocessedData
-          run:
-            class: Operation
-            inputs:
-              PreprocessedData: Directory
-            outputs:
-              SimulatedWaveforms: Directory
-          out:
-            - SimulatedWaveforms
-        SS7406:
-          doc: "H-MEC: Hydro-Mechanical Earthquake Cycles."
-          in:
-            PreprocessedData: PreprocessedData
-          run:
-            class: Operation
-            inputs:
-              PreprocessedData: Directory
-            outputs:
-              SimulatedCrustalStress: Directory
-          out:
-            - SimulatedCrustalStress
+       
         CombineResults:
           doc: "Combines results from SS7401, SS7405, and SS7406."
           in:
