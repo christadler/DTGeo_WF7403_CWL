@@ -98,9 +98,7 @@ steps:
     out:
       - SDL_AltoTiberina_Catalog
 
-# We probably need an extra step for uploading the data to the SDL
-
- ST74030401:
+  ST74030401:
     doc: "Detect Event."
     in: #no input data (only current time needed)
     run:
@@ -112,7 +110,7 @@ steps:
     out:
       - Event_time
 
- ST74030402:
+  ST74030402:
     doc: "Download Waveforms."
     in:
       Event_time: ST74030401/Event_time    #Event_time
@@ -125,8 +123,7 @@ steps:
     out:
       - Waveforms
 
-
- ST740305:
+  ST740305:
     doc: "Find closest match."
     in:
       AT_Catalog: DT740702               #SDL AltoTiberina_Catalog
