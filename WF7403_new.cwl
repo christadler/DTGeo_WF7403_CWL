@@ -10,50 +10,30 @@ inputs:
   DT740601:
     doc: "CSV File to generate input files for catalog"
     type: File
-  DT740602:
-    doc: "Directory with SeisSol input files and slurm scripts"
-    type: Directory
   DT740603:
     doc: "SDL-Data AltoTiberina_Inputs contains mesh and asagi for SeisSol"
     type: Directory
-  DT740701:
-    doc: "Full SeisSol outputs for all rupture scenarios"
-    type: Directory
-  DT740702:
-    doc: "SDL-Data AltoTiberina_Catalog of (postprocessed) rupture scenarios."
-    type: Directory
-  DT740801:
-    doc: "Event time."
-    type: String
-  DT7408:
-    doc: "Downloaded waveforms and station list."
-    type: Directory
+  Current_Time:
+    doc: "Current Time since ST74030401 needs at least one input parameter"
+    type: File
 
 outputs:
-  DT740602:
-    doc: "Directory with SeisSol Input Files."
-    type: Directory
-    outputSource: ST740301/DT740602
-  DT740701:
-    doc: "Full SeisSol_Output."
-    type: Directory
-    outputSource: ST740302/DT740701
-  DT740702:
+  SDL_AltoTiberina_Catalog:
     doc: "SDL AltoTiberina_Catalog."
     type: Directory
-    outputSource: ST740303/DT740702
-  DT740801:
+    outputSource: ST740303/SDL_AltoTiberina_Catalog
+  Event_Time:
     doc: "Event time."
-    type: String
-    outputSource: ST74030401/DT740801
-  DT7408:
+    type: File
+    outputSource: ST74030401/Event_Time
+  Waveforms:
     doc: "Downloaded waveforms."
     type: Directory
-    outputSource: ST74030402/DT7408
-  DT7409:
+    outputSource: ST74030402/Waveforms
+  Closest_Match:
     doc: "Single dynamic rupture scenario."
-    type: Directory
-    outputSource: ST740305/DT7409
+    type: File
+    outputSource: ST740305/Closest_Match
 
 steps:
   ST740301:
@@ -101,23 +81,24 @@ steps:
   ST74030401:
     doc: "Detect Event."
     in: #no input data (only current time needed)
+      InputData: Current_Time
     run:
       class: Operation             #detect_event.py
       inputs:
-          InputData: Directory
+          InputData: File
       outputs:
-          Event_time: String
+          Event_Time: File         #string?
     out:
-      - Event_time
+      - Event_Time
 
   ST74030402:
     doc: "Download Waveforms."
     in:
-      Event_time: ST74030401/Event_time    #Event_time
+      Event_Time: ST74030401/Event_Time    #Event_Time
     run:
       class: Operation             #download_TABOO_waveforms.py
       inputs:
-          InputData: Directory
+          Event_Time: File
       outputs:
           Waveforms: Directory
     out:
@@ -126,17 +107,17 @@ steps:
   ST740305:
     doc: "Find closest match."
     in:
-      AT_Catalog: DT740702               #SDL AltoTiberina_Catalog
-      Event_time: ST74030401/Event_time  #Event_time
+      SDL_AltoTiberina_Catalog: ST740303/SDL_AltoTiberina_Catalog #SDL AltoTiberina_Catalog
+      Event_Time: ST74030401/Event_Time  #Event_Time
       Waveforms: ST74030402/Waveforms    #Downloaded Waveforms
     run:
       class: Operation             #search_SeisSol_ensemble.py
       inputs:
-          AT_Catalog: Directory
-          Event_time: String       # Date?
+          SDL_AltoTiberina_Catalog: Directory
+          Event_Time: File
           Waveforms: Directory
       outputs:
-          SDL_AltoTiberina_Catalog: Directory
+          Closest_Match: File
     out:
-      - SDL_AltoTiberina_Catalog
+      - Closest_Match
 
