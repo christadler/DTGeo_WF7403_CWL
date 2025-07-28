@@ -1,0 +1,172 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "conformsTo": [
+        { "@id": "https://w3id.org/ro/crate/1.1" },
+        { "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0" }
+      ],
+      "about": { "@id": "./" }
+    },
+    {
+      "@id": "https://w3id.org/ro/wfrun/process/0.4",
+      "@type": "CreativeWork",
+      "name": "Process Run Crate",
+      "version": "0.4"
+    },
+    {
+      "@id": "https://w3id.org/ro/wfrun/workflow/0.4",
+      "@type": "CreativeWork",
+      "name": "Workflow Run Crate",
+      "version": "0.4"
+    },
+    {
+      "@id": "https://w3id.org/workflowhub/workflow-ro-crate#cwl",
+      "@type": "ComputerLanguage",
+      "identifier": "https://www.commonwl.org/",
+      "name": "Common Workflow Language",
+      "url": "https://www.commonwl.org/"
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "name": "WF7403 - Rupture Forecast Workflow",
+      "datePublished": "2025-05-16",
+      "description": "This workflow uses physics-based forward dynamic rupture simulations to create a catalog of rupture scenarios for a given fault system. For each scenario, synthetic data (ground motions, static displacements, moment rate release) are output and the associated shake map is computed. In the event of a moderate to large earthquake, the workflow will perform an automatic search of the scenario catalog to find the scenario that better represents the event within minutes to hours after its occurrence (rapid-response workflow).",
+      "license": {
+        "@id": "https://opensource.org/licenses/BSD-3-Clause"
+      },
+      "creator": { "@id": "https://ror.org/05591te55" },
+      "hasPart": [
+        { "@id": "WF7403.cwl" },
+        { "@id": "DT740601_csv/" },
+        { "@id": "DT740603_mesh/" },
+        { "@id": "Waveforms/" },
+        { "@id": "Closest_Match/" },
+        { "@id": "SS7401" }
+      ],
+      "mainEntity": { "@id": "WF7403.cwl" }
+    },
+    {
+      "@id": "WF7403.cwl",
+      "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
+      "name": "Rupture Forecast Workflow",
+      "programmingLanguage": {
+        "@id": "https://w3id.org/workflowhub/workflow-ro-crate#cwl"
+      },
+      "creator": [
+        { "@id": "https://orcid.org/0000-0002-9293-0306" }, 
+        { "@id": "https://orcid.org/0000-0001-7883-8397" }, 
+        { "@id": "https://orcid.org/0000-0003-0112-8412" }
+      ],
+      "license": "https://spdx.org/licenses/BSD-3-Clause"
+    },
+    {
+      "@id": "DT740601_csv/",
+      "@type": "File",
+      "name": "Input file for forward dynamic rupture simulation",
+      "description": "This file contains all the input data needed to generate input parameter files to generate the catalog of forward dynamic rupture simulations.",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://orcid.org/0000-0001-7883-8397" }
+      ]
+    },
+    {
+      "@id": "DT740603_mesh/",
+      "@type": "Dataset",
+      "name": "Input meshes and asagi file for forward dynamic rupture simulation",
+      "description": "This dataset is stored in the SDL as AltoTiberina_Inputs. It contains meshes and asagi files for the dynamic rupture simulations.",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://orcid.org/0000-0001-7883-8397" }
+      ]
+    },
+    {
+      "@id": "Alto_Tiberina_Catalog/",
+      "@type": "Dataset",
+      "name": "Catalog of dynamic rupture simulations",
+      "description": "This dataset is an intermediate result that is stored in the SDL as AltoTiberina_Catalog. It contains postprocessed output and data products for each of the dynamic rupture simulations.",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://ror.org/05591te55" }
+      ]
+    },
+    {
+      "@id": "Waveforms/",
+      "@type": "Dataset",
+      "name": "Seismic and geodetic data",
+      "description": "Seismic and geodetic data streamed in real time from an EPOS infrastructure (_NFOTABOO, webservices.ingv.it)",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://ror.org/00qps9a02" }
+      ]
+    },
+    {
+      "@id": "Closest_Match/",
+      "@type": "Dataset",
+      "name": "Single dynamic rupture scenario",
+      "description": "Best-fitting scenario output from the catalog of scenarios.",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://ror.org/05591te55" }
+      ]
+    },
+    {
+      "@id": "SS7401",
+      "@type": "SoftwareSourceCode",
+      "name": "SeisSol",
+      "description": "SeisSol is a high-performance computational seismology software to simulate complex earthquake scenarios.",
+      "license": "https://spdx.org/licenses/BSD-3-Clause",
+      "programmingLanguage": [
+      "Python >= 3.5",
+      "C++",
+      "Fortran"
+      ],
+      "url": "https://github.com/SeisSol/",
+      "organization": [
+      { "@id": "https://ror.org/05591te55" }
+      ],
+      "person": [
+      { "@id": "https://orcid.org/0000-0003-0112-8412" }
+      ]
+    },
+    {
+      "@id": "https://orcid.org/0000-0001-7883-8397",
+      "@type": "Person",
+      "name": "Mathilde Marchandon",
+      "email": "M.Marchandon@lmu.de",
+      "affiliation": { "@id": "https://ror.org/05591te55" }
+    },
+    {
+      "@id": "https://orcid.org/0000-0003-0112-8412",
+      "@type": "Person",
+      "name": "Alice-Agnes Gabriel",
+      "email": "gabriel@geophysik.uni-muenchen.de",
+      "affiliation": { "@id": "https://ror.org/05591te55" }
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-9293-0306",
+      "@type": "Person",
+      "name": "Iris Christadler",
+      "email": "iris.christadler@lmu.de",
+      "affiliation": { "@id": "https://ror.org/05591te55" }
+    },
+    {
+      "@id": "https://ror.org/05591te55",
+      "@type": "Organization",
+      "name": "Ludwig-Maximilians-Universität München (LMU)"
+    },
+   {
+      "@id": "https://ror.org/05xtktk35",
+      "@type": "Organization",
+      "name": "Géoazur"
+    }
+  ]
+}
