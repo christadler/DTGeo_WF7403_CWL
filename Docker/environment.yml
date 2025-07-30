@@ -1,6 +1,7 @@
 # File copied from https://github.com/marcmath/download_TABOO_waveforms/blob/main/environment.yml
 # Install environment with
 # conda env create -f requirements.yml
+# only use the packages that are absolutely necessary
 channels:
   - conda-forge
 dependencies:

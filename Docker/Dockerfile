@@ -46,6 +46,7 @@ COPY AltoTiberinaCatalog /app/AltoTiberinaCatalog
 #python3 ./detect_event.py >> RapidResponse.log 2>> RapidResponse.err
 # Optional: setze den Befehl, der beim Start ausgeführt wird
 #CMD ["python", "dein_script.py"]
+#CMD ["python3", "detect_event.py"]
 
 # It is possible to mount data when starting the container (as VOLUME)
 # docker run -v /local/path/to/data:/app/AltoTiberinaCatalog
