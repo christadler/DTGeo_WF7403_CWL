@@ -42,11 +42,10 @@ RUN mkdir -p /app/TABOO_waveforms
 # In the meantime COPY ALTO_TIBERINA_CATALOG TO THE DOCKER DIR
 COPY AltoTiberinaCatalog /app/AltoTiberinaCatalog
 
-# RUN detect_event.py (needs to be called by the .cwl file)
-#python3 ./detect_event.py >> RapidResponse.log 2>> RapidResponse.err
-# Optional: setze den Befehl, der beim Start ausgeführt wird
 #CMD ["python", "dein_script.py"]
-#CMD ["python3", "detect_event.py"]
+#python3 ./detect_event.py >> RapidResponse.log 2>> RapidResponse.err
+#docker run -v $(pwd)/logs:/app/logs --name mein_container mein_image
+CMD ["python3", "detect_event.py"]
 
 # It is possible to mount data when starting the container (as VOLUME)
 # docker run -v /local/path/to/data:/app/AltoTiberinaCatalog
