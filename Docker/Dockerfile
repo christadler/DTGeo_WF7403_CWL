@@ -42,6 +42,10 @@ RUN mkdir -p /app/TABOO_waveforms
 # In the meantime COPY ALTO_TIBERINA_CATALOG TO THE DOCKER DIR
 COPY AltoTiberinaCatalog /app/AltoTiberinaCatalog
 
+# For testing we could copy a local version of detect_event.py 
+# that searches for EQ in the last 7 days of magnitude 2.0 and above
+#COPY detect_event.py /app/detect_event.py
+
 #CMD ["python", "dein_script.py"]
 #python3 ./detect_event.py >> RapidResponse.log 2>> RapidResponse.err
 #docker run -v $(pwd)/logs:/app/logs --name mein_container mein_image
