@@ -34,7 +34,8 @@ RUN curl -o /app/search_catalog_for_best_fit_model.py https://raw.githubusercont
 RUN chmod u+x /app/*.py
 
 # Create empty 'TABOO_waveforms' directory
-RUN mkdir -p /app/TABOO_waveforms
+VOLUME ["/app/TABOO_waveforms"]
+#RUN mkdir -p /app/TABOO_waveforms
 
 # Add AltoTiberina_Catalog 
 # currently not directly from SDL since the SDL has problems to download the full catalog
@@ -44,13 +45,11 @@ COPY AltoTiberinaCatalog /app/AltoTiberinaCatalog
 
 # For testing we could copy a local version of detect_event.py 
 # that searches for EQ in the last 7 days of magnitude 2.0 and above
-#COPY detect_event.py /app/detect_event.py
+COPY detect_event.py /app/detect_event.py
 
-#CMD ["python", "dein_script.py"]
 #python3 ./detect_event.py >> RapidResponse.log 2>> RapidResponse.err
-#docker run -v $(pwd)/logs:/app/logs --name mein_container mein_image
 CMD ["python3", "detect_event.py"]
 
 # It is possible to mount data when starting the container (as VOLUME)
-# docker run -v /local/path/to/data:/app/AltoTiberinaCatalog
+#docker run -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms --name christadler/dtgeo_wf7403_rr:latest my_image
 

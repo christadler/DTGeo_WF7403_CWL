@@ -6,27 +6,40 @@ that will allow to execute the workflow WF7403a.cwl
 ## Generate the dockerfile, test and upload it
 
 ```bash
-# Build the Dockerfile
+# Build the general or test Dockerfile
+# The GENERAL Dockerfile looks for EQ in the last hour with minmagnitude>4
+# The TEST Dockerfile looks for EQ in the last week with minmagnitude>2
 docker build -t dtgeo_wf7403_rr .
+docker build -t dtgeo_wf7403_rr:test .
 
 # Check the image (size)
 docker images dtgeo_wf7403_rr
+docker images dtgeo_wf7403_rr:test
 
 # Interactively run the docker image
 # to check if scripts and data work together
-docker run -i -t dtgeo_wf7403_rr /bin/bash
+docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Misfits:/app/Misfits -t dtgeo_wf7403_rr:latest /bin/bash
+docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Misfits:/app/Misfits -t dtgeo_wf7403_rr:test /bin/bash
+
+# Run the docker image (this will automatically start ./detect_event.py)
+docker run -v $(pwd)/TABOO_test:/app/TABOO_waveforms -t dtgeo_wf7403_rr:test 
+docker run -t dtgeo_wf7403_rr:latest
+docker run -t dtgeo_wf7403_rr:test 
 
 docker login -u <username>
 # Use your password (WP) or alternatively a docker personal access token (PAT)
 
 # Set a tag for the image
-docker tag dtgeo_wf7403_rr christadler/dtgeo_wf7403_rr:latest
+docker tag dtgeo_wf7403_rr:latest christadler/dtgeo_wf7403_rr:latest
+docker tag dtgeo_wf7403_rr:test christadler/dtgeo_wf7403_rr:test
 
 # push the image to hub.docker.com
 docker push christadler/dtgeo_wf7403_rr:latest
+docker push christadler/dtgeo_wf7403_rr:test
 
 # to simply download the image use
 docker pull christadler/dtgeo_wf7403_rr:latest
+docker pull christadler/dtgeo_wf7403_rr:test
 ```
 
 ## How to use the dockerimage
@@ -55,11 +68,11 @@ os.system(f"python3 search_catalog_for_best_fit_model.py {eq_time} TABOO_wavefor
 
 ### Mount catalog as volume
 
-For the future we might want to mount the SDL AltoTiberina\_Catalog as a volume, so that we could always use the latest catalog or choose a catalog for this region. This should be adapted once a cwl blueprint for an SDL download software step is available. 
+For the future we might want to mount the SDL AltoTiberina\_Catalog as a volume, so that we could always use the latest catalog or choose a catalog for this region. This should be adapted once a cwl blueprint for an SDL download software step is available. So far, the data from the SDL is hard-coded in the Dockerimage, but could be replaced at runtime by a mounted volume
 
 ```bash
-# make sure to mount the VOLUME properly in the Dockerfile
-docker run -v /local/path/to/data:/app/AltoTiberinaCatalog
+# if a directory SDL_Catalog_Alternative is available one could mount the catalog as
+docker run -v $(pwd)/SDL_Catalog_Alternative:/app/AltoTiberinaCatalog -v $(pwd)/TABOO_test:/app/TABOO_waveforms -t dtgeo_wf7403_rr:latest
 ```
 
 ### Capture the output

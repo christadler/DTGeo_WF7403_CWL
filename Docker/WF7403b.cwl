@@ -2,14 +2,55 @@
 cwlVersion: v1.2
 class: Workflow
 
+label: Rapid Response Part of DT-Geo WF7403.
+
+# metadata
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0002-9293-0306
+    s:email: mailto:iris.christadler@lmu.de	
+    s:name: Iris Christadler
+s:author:
+  - class: s:Person
+    s:identifier: https://orcid.org/0000-0001-7883-8397
+    s:email: mailto:mmarchandon@lmu.de
+    s:name: Mathilde Marchandon
+s:codeRepository: https://github.com/christadler/DTGeo_WF7403_CWL/tree/main/Docker
+s:dateCreated: "2026-08-06"
+s:license: https://spdx.org/licenses/Apache-2.0 #TODO: different license?
+s:programmingLanguage: Python
+
 requirements:
   MultipleInputFeatureRequirement: {} 
   SubworkflowFeatureRequirement: {} #only if subworkflows are used
+  # Preparation for LISTENER MODULE that would output 
+  # the date and time of the workflow
+  # InitialWorkDirRequirement will stage input files in the output dir
+  #InitialWorkDirRequirement:
+    #listing:
+      #- entryname: download_TABOO_waveforms.sh
+        #entry: |-
+          #CMD='python3 download_TABOO_waveforms.py'
+          #OUTPUT_FOLDER='TABOO_waveforms'
+          #DURATION= '60'
+          #MSG="\${CMD} $(inputs.EQ_time) \${OUTPUT_FOLDER} \${DURATION}" 
+          #echo \${MSG}
+      #- entryname: search_catalog_for_best_fit_model.sh
+        #entry: |-
+          #CMD='python3 search_catalog_for_best_fit_model.py'
+          ## connected to downloaded waveforms from first command
+          #OBSDIR='TABOO_waveforms'
+          ## connect with SDL download
+          #ENSEMBE_DIR= 'AltoTiberinaCatalog'
+          #MSG="\${CMD} $(inputs.EQ_time) \${OBSDIR} \${ENSEMBE_DIR}"
+          #echo \${MSG}
+
 
 inputs:
   SDL_AltoTiberina_Catalog:
     doc: "SDL AltoTiberina_Catalog."
     type: Directory
+  #EQ_time: string #preparation for listener module
 
 outputs:
   #Event_Time:
@@ -37,10 +78,13 @@ steps:
     run:
       class: CommandLineTool
       baseCommand: ["sh", "-c"]
+      hints:
+        DockerRequirement:
+          dockerPull: christadler/dtgeo_wf7403_rr:latest
       #Docker run –v $(pwd)/logs:/app/logs --name mein_container mein_image
       #until docker ...; do sleep 60; done
       arguments: ["until docker run \
-                   -v $(pwd)/download_waveforms:/app/download_waveforms
+                   -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms
                    -v SDL_AltoTiberina_Catalog:/app/AltoTiberinaCatalog
                    --name christadler/dtgeo_wf7403_rr:latest \
                    do sleep 60; done "]
