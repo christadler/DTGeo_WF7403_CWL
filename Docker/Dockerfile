@@ -35,7 +35,8 @@ RUN chmod u+x /app/*.py
 
 # Create empty 'TABOO_waveforms' directory
 VOLUME ["/app/TABOO_waveforms"]
-#RUN mkdir -p /app/TABOO_waveforms
+# Create empty 'Scenario_Misfit' directory
+VOLUME ["/app/Scenario_Misfit"]
 
 # Add AltoTiberina_Catalog 
 # currently not directly from SDL since the SDL has problems to download the full catalog
@@ -49,7 +50,3 @@ COPY detect_event.py /app/detect_event.py
 
 #python3 ./detect_event.py >> RapidResponse.log 2>> RapidResponse.err
 CMD ["python3", "detect_event.py"]
-
-# It is possible to mount data when starting the container (as VOLUME)
-#docker run -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms --name christadler/dtgeo_wf7403_rr:latest my_image
-

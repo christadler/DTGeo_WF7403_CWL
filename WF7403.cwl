@@ -3,142 +3,56 @@ cwlVersion: v1.2
 class: Workflow
 
 requirements:
-  SubworkflowFeatureRequirement: {}
+  MultipleInputFeatureRequirement: {} 
+  SubworkflowFeatureRequirement: {} #only if subworkflows are used
 
 inputs:
-  DT7406:
-    doc: "Seismic, geophysical and geological constraint data."
+  DT740601_csv:
+    doc: "CSV File to generate input files for catalog"
+    type: File
+  DT740603_mesh:
+    doc: "SDL-Data AltoTiberina_Inputs contains mesh and asagi for SeisSol"
     type: Directory
-  DT7407:
-    doc: "Catalogue of rupture scenarios."
-    type: Directory
-  DT7408:
-    doc: "Seismic and Geodetic data, such as station list, waveforms, GPS data, moment rate release."
-    type: Directory
+  Current_Time:
+    doc: "Current Time since ST74030401 needs at least one input parameter"
+    type: string
 
 outputs:
-  DT7409:
-    doc: "Single dynamic rupture scenario."
+  SDL_AltoTiberina_Catalog:
+    doc: "SDL AltoTiberina_Catalog."
     type: Directory
-    outputSource: ST740305/DT7409
+    outputSource: ST7403_Catalog_Creation/SDL_AltoTiberina_Catalog
+  Event_Time:
+    doc: "Event time."
+    type: string
+    outputSource: ST7403_Rapid_Response/Event_Time
+  Waveforms:
+    doc: "Downloaded waveforms."
+    type: Directory
+    outputSource: ST7403_Rapid_Response/Waveforms
+  Closest_Match:
+    doc: "Single dynamic rupture scenario."
+    type: File
+    outputSource: ST7403_Rapid_Response/Closest_Match
 
 steps:
-  ST740301:
-    doc: "Input of rupture forecast data and constraints."
+  ST7403_Catalog_Creation:
+    doc: "Catalog Creation Workflow."
     in:
-      InputData: DT7406
-    run:
-      class: Operation
-      inputs:
-          InputData: Directory
-      outputs:
-          PreprocessedData: Directory
+      DT740601_csv: DT740601_csv       #CSV File
+      DT740603_mesh: DT740603_mesh     #SDL AltoTiberina_Inputs (mesh+asagi)
     out:
-      - PreprocessedData
+      - SDL_AltoTiberina_Catalog
+    run: WF7403a.cwl
 
-  ST740302:
-    doc: "Forward dynamic rupture simulations."
+  ST7403_Rapid_Response:
+    doc: "Rapid Response Workflow."
     in:
-      PreprocessedData: ST740301/PreprocessedData
-    run:
-      class: Workflow
-      inputs:
-        PreprocessedData: Directory
-      outputs:
-        SimulatedRuptureResult: Directory
-      steps:
-        SS7401:
-          doc: "SeisSol: Simulate complex earthquake scenarios with high-precission."
-          in:
-            PreprocessedData: PreprocessedData
-          run:
-            class: Operation
-            inputs:
-              PreprocessedData: Directory
-            outputs:
-              SimulatedRupture: Directory
-          out:
-            - SimulatedRupture
-        SS7405:
-          doc: "SPECFEM3D: Seismic wavepropagation in different coordinate systems."
-          in:
-            PreprocessedData: PreprocessedData
-          run:
-            class: Operation
-            inputs:
-              PreprocessedData: Directory
-            outputs:
-              SimulatedWaveforms: Directory
-          out:
-            - SimulatedWaveforms
-        SS7406:
-          doc: "H-MEC: Hydro-Mechanical Earthquake Cycles."
-          in:
-            PreprocessedData: PreprocessedData
-          run:
-            class: Operation
-            inputs:
-              PreprocessedData: Directory
-            outputs:
-              SimulatedCrustalStress: Directory
-          out:
-            - SimulatedCrustalStress
-        CombineResults:
-          doc: "Combines results from SS7401, SS7405, and SS7406."
-          in:
-            SimulatedRupture: SS7401/SimulatedRupture
-            SimulatedWaveforms: SS7405/SimulatedWaveforms
-            SimulatedCrustalStress: SS7406/SimulatedCrustalStress
-          run:
-            class: Operation
-            inputs:
-              SimulatedRupture: Directory
-              SimulatedWaveforms: Directory
-              SimulatedCrustalStress: Directory
-            outputs:
-              SimulatedRuptureResult: Directory
-          out:
-            - SimulatedRuptureResult
+      Current_Time: Current_Time
+      SDL_AltoTiberina_Catalog: ST7403_Catalog_Creation/SDL_AltoTiberina_Catalog
     out:
-      - SimulatedRuptureResult
+      - Event_Time
+      - Waveforms
+      - Closest_Match
+    run: WF7403b.cwl
 
-  ST740303:
-    doc: "Create ensemble rupture scenarios."
-    in:
-      SimulatedRuptureResult: ST740302/SimulatedRuptureResult
-    run:
-      class: Operation
-      inputs:
-        SimulatedRuptureResult: Directory
-      outputs:
-        DT7407: Directory
-    out:
-      - DT7407
-
-  ST740304:
-    doc: "Additional Seismic and Geodetic data."
-    in:
-      SeismicGeodeticDataAdd: DT7408
-    run:
-      class: Operation
-      inputs:
-        SeismicGeodeticDataAdd: Directory
-      outputs:
-        PreprocessedAddData: Directory
-    out:
-      - PreprocessedAddData   
-
-  ST740305:
-    doc: "Generate shake map from selected scenario."
-    in:
-      EnsembleOutput: ST740303/DT7407
-      PreprocessedAddData: ST740304/PreprocessedAddData
-    run:
-      class: Operation
-      inputs:
-        EnsembleOutput: Directory
-        PreprocessedAddData: Directory
-      outputs:
-        DT7409: Directory
-    out:
-      - DT7409

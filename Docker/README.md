@@ -18,8 +18,8 @@ docker images dtgeo_wf7403_rr:test
 
 # Interactively run the docker image
 # to check if scripts and data work together
-docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Misfits:/app/Misfits -t dtgeo_wf7403_rr:latest /bin/bash
-docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Misfits:/app/Misfits -t dtgeo_wf7403_rr:test /bin/bash
+docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Scenario_Misfit:/app/Scenario_Misfit -t dtgeo_wf7403_rr:latest /bin/bash
+docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Scenario_Misfit:/app/Scenario_Misfit -t dtgeo_wf7403_rr:test /bin/bash
 
 # Run the docker image (this will automatically start ./detect_event.py)
 docker run -v $(pwd)/TABOO_test:/app/TABOO_waveforms -t dtgeo_wf7403_rr:test 

@@ -1,0 +1,244 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "conformsTo": [
+        { "@id": "https://w3id.org/ro/crate/1.1" },
+        { "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0" }
+      ],
+      "about": { "@id": "./" }
+    },
+    {
+      "@id": "https://w3id.org/ro/wfrun/process/0.4",
+      "@type": "CreativeWork",
+      "name": "Process Run Crate",
+      "version": "0.4"
+    },
+    {
+      "@id": "https://w3id.org/ro/wfrun/workflow/0.4",
+      "@type": "CreativeWork",
+      "name": "Workflow Run Crate",
+      "version": "0.4"
+    },
+    {
+      "@id": "https://w3id.org/workflowhub/workflow-ro-crate#cwl",
+      "@type": "ComputerLanguage",
+      "identifier": "https://www.commonwl.org/",
+      "name": "Common Workflow Language",
+      "url": "https://www.commonwl.org/"
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "name": "WF7403 - Rupture Forecast Workflow",
+      "datePublished": "2025-05-16",
+      "description": "This workflow uses physics-based forward dynamic rupture simulations to create a catalog of rupture scenarios for a given fault system. For each scenario, synthetic data (ground motions, static displacements, moment rate release) are output and the associated shake map is computed. In the event of a moderate to large earthquake, the workflow will perform an automatic search of the scenario catalog to find the scenario that better represents the event within minutes to hours after its occurrence (rapid-response workflow).",
+      "license": {
+        "@id": "https://opensource.org/licenses/BSD-3-Clause"
+      },
+      "creator": { "@id": "https://ror.org/05591te55" },
+      "hasPart": [
+        { "@id": "WF7403.cwl" },
+        { "@id": "DT7406/" },
+        { "@id": "DT7408/" },
+        { "@id": "DT7409/" },
+        { "@id": "SS7401" },
+        { "@id": "SS7405" }
+      ],
+      "mainEntity": { "@id": "WF7403.cwl" }
+    },
+    {
+      "@id": "WF7403.cwl",
+      "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
+      "name": "Rupture Forecast Workflow",
+      "programmingLanguage": {
+        "@id": "https://w3id.org/workflowhub/workflow-ro-crate#cwl"
+      },
+      "creator": [
+        { "@id": "https://orcid.org/0000-0003-1147-5872" },
+        { "@id": "https://orcid.org/0000-0002-4827-7987" },
+        { "@id": "https://orcid.org/0000-0002-8207-1464" }
+      ],
+      "license": "https://spdx.org/licenses/BSD-3-Clause"
+    },
+    {
+      "@id": "DT7406/",
+      "@type": "Dataset",
+      "name": "Input files for forward dynamic rupture simulation",
+      "description": "This dataset contains all the input data needed for forward dynamic rupture simulations including, mesh, velocity model, frictional parameters, medium parameters, initial stress.",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://orcid.org/0000-0001-7883-8397" }
+      ]
+    },
+    {
+      "@id": "DT7408/",
+      "@type": "Dataset",
+      "name": "Seismic and geodetic data",
+      "description": "Seismic and geodetic data streamed in real time from an EPOS infrastructure",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://ror.org/00qps9a02" }
+      ]
+    },
+    {
+      "@id": "DT7409/",
+      "@type": "Dataset",
+      "name": "Single dynamic rupture scenario",
+      "description": "Best-fitting scenario output from the catalog of scenarios.",
+      "license": "https://spdx.org/licenses/CC-BY-4.0",
+      "isPartOf": { "@id": "./" },
+      "creator": [
+      { "@id": "https://ror.org/05591te55" }
+      ]
+    },
+    {
+      "@id": "SS7401",
+      "@type": "SoftwareSourceCode",
+      "name": "SeisSol",
+      "description": "SeisSol is a high-performance computational seismology software to simulate complex earthquake scenarios.",
+      "license": "https://spdx.org/licenses/BSD-3-Clause",
+      "programmingLanguage": [
+      "Python >= 3.5",
+      "C++",
+      "Fortran"
+      ],
+      "url": "https://github.com/SeisSol/",
+      "organization": [
+      { "@id": "https://ror.org/05591te55" }
+      ],
+      "person": [
+      { "@id": "https://orcid.org/0000-0003-0112-8412" }
+      ]
+    },
+    {
+      "@id": "SS7405",
+      "@type": "SoftwareSourceCode",
+      "name": "SPECFEM3D",
+      "description": "SPECFEM3D_Cartesian simulates seismic wave propagation in structured or unstructured hexahedral meshes.",
+      "license": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+      "programmingLanguage": [
+      "Python >= 3.5",
+      "C++",
+      "Fortran"
+      ],
+      "url": "https://github.com/SPECFEM/specfem3d",
+      "organization": [
+      { "@id": "https://ror.org/05591te55" },
+      { "@id": "https://ror.org/00hx57361" },
+      { "@id": "https://ror.org/01q3tbs38" },
+      { "@id": "https://ror.org/03787ar02" },
+      { "@id": "https://ror.org/01j7nq853" },
+      { "@id": "https://ror.org/03dbr7087" },
+      { "@id": "https://ror.org/04raf6v53" },
+      { "@id": "https://ror.org/05xtktk35" },
+      { "@id": "https://ror.org/00qps9a02" }
+      ],
+      "person": [
+      { "@id": "https://orcid.org/0000-0002-3937-4312" },
+      { "@id": "https://orcid.org/0000-0003-2309-8269" }
+      ]
+    },
+    {
+      "@id": "https://orcid.org/0000-0001-7883-8397",
+      "@type": "Person",
+      "name": "Mathilde Marchandon",
+      "email": "M.Marchandon@lmu.de",
+      "affiliation": { "@id": "https://ror.org/05591te55" }
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-8207-1464",
+      "@type": "Person",
+      "name": "Johannes Kemper",
+      "email": "johannes.kemper@eaps.ethz.ch",
+      "affiliation": { "@id": "https://ror.org/05a28rw58" }
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-9697-6504",
+      "@type": "Person",
+      "name": "Lauro Chiaraluce",
+      "email": "lauro.chiaraluce@ingv.it",
+      "affiliation": { "@id": "https://ror.org/00qps9a02" }
+    },
+    {
+      "@id": "https://orcid.org/0000-0003-0112-8412",
+      "@type": "Person",
+      "name": "Alice-Agnes Gabriel",
+      "email": "gabriel@geophysik.uni-muenchen.de",
+      "affiliation": { "@id": "https://ror.org/05591te55" }
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-3937-4312",
+      "@type": "Person",
+      "name": "Emanuele Casarotti",
+      "email": "emanuele.casarotti@ingv.it",
+      "affiliation": { "@id": "https://ror.org/00qps9a02" }
+    },
+    {
+      "@id": "https://orcid.org/0000-0003-2309-8269",
+      "@type": "Person",
+      "name": "Dimitri Komatitsch",
+      "email": "komatitsch@lma.cnrs-mrs.fr",
+      "affiliation": { "@id": "https://ror.org/02feahw73" }
+    },
+    {
+      "@id": "https://ror.org/00qps9a02",
+      "@type": "Organization",
+      "name": "Istituto Nazionale di Geofisica e Vulcanologia"
+    },
+    {
+      "@id": "https://ror.org/05591te55",
+      "@type": "Organization",
+      "name": "Ludwig-Maximilians-Universität München (LMU)"
+    },
+    {
+      "@id": "https://ror.org/05a28rw58",
+      "@type": "Organization",
+      "name": "Eidgenössische Technische Hochschule Zürich (ETH)"
+    },
+    {
+      "@id": "https://ror.org/00hx57361",
+      "@type": "Organization",
+      "name": "Princeton"
+    },
+    {
+      "@id": "https://ror.org/01q3tbs38",
+      "@type": "Organization",
+      "name": "KAUST"
+    },
+    {
+      "@id": "https://ror.org/03787ar02",
+      "@type": "Organization",
+      "name": "LMA Marseille"
+    },
+    {
+      "@id": "https://ror.org/01j7nq853",
+      "@type": "Organization",
+      "name": "University of Alaska Fairbanks"
+    },
+    {
+      "@id": "https://ror.org/03dbr7087",
+      "@type": "Organization",
+      "name": "University of Toronto"
+    },
+    {
+      "@id": "https://ror.org/04raf6v53",
+      "@type": "Organization",
+      "name": "Colorado School of Mines"
+    },
+    {
+      "@id": "https://ror.org/05xtktk35",
+      "@type": "Organization",
+      "name": "Géoazur"
+    },
+    {
+      "@id": "https://ror.org/02feahw73",
+      "@type": "Organization",
+      "name": "CNRS"
+    }
+  ]
+}
