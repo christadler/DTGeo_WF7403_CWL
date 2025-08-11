@@ -30,7 +30,6 @@ RUN curl -o /app/detect_event.py https://raw.githubusercontent.com/marcmath/down
 RUN curl -o /app/download_TABOO_waveforms.py https://raw.githubusercontent.com/marcmath/download_TABOO_waveforms/main/download_TABOO_waveforms.py
 RUN curl -o /app/search_catalog_for_best_fit_model.py https://raw.githubusercontent.com/NicoSchlw/search_SeisSol_ensemble/main/search_catalog_for_best_fit_model.py
 
-#chmod u+x /app/detect_event.py
 RUN chmod u+x /app/*.py
 
 # Create empty 'TABOO_waveforms' directory
@@ -44,9 +43,9 @@ VOLUME ["/app/Scenario_Misfit"]
 # In the meantime COPY ALTO_TIBERINA_CATALOG TO THE DOCKER DIR
 COPY AltoTiberinaCatalog /app/AltoTiberinaCatalog
 
-# For testing we could copy a local version of detect_event.py 
+# For TESTing we could copy a local version of detect_event.py 
 # that searches for EQ in the last 7 days of magnitude 2.0 and above
-COPY detect_event.py /app/detect_event.py
+#COPY detect_event.py /app/detect_event.py
 
 #python3 ./detect_event.py >> RapidResponse.log 2>> RapidResponse.err
 CMD ["python3", "detect_event.py"]

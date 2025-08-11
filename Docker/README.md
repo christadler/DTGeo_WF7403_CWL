@@ -6,40 +6,35 @@ that will allow to execute the workflow WF7403a.cwl
 ## Generate the dockerfile, test and upload it
 
 ```bash
-# Build the general or test Dockerfile
-# The GENERAL Dockerfile looks for EQ in the last hour with minmagnitude>4
-# The TEST Dockerfile looks for EQ in the last week with minmagnitude>2
+# Build the Dockerfile
+# The GENERAL Dockerfile (hourly) looks for EQ in the last hour with minmagnitude>4 it uses the github versio of detect_event.py
+# The TEST    Dockerfile (weekly) looks for EQ in the last week with minmagnitude>2 it uses the local version of detect_event.py
 docker build -t dtgeo_wf7403_rr .
-docker build -t dtgeo_wf7403_rr:test .
+docker build --no-cache -t dtgeo_wf7403_rr . # if github files have changed
 
 # Check the image (size)
 docker images dtgeo_wf7403_rr
-docker images dtgeo_wf7403_rr:test
 
-# Interactively run the docker image
-# to check if scripts and data work together
-docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Scenario_Misfit:/app/Scenario_Misfit -t dtgeo_wf7403_rr:latest /bin/bash
-docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v$(pwd)/Scenario_Misfit:/app/Scenario_Misfit -t dtgeo_wf7403_rr:test /bin/bash
+# Interactively run the docker image to check if scripts and data work together
+docker run -i -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v $(pwd)/Scenario_Misfit:/app/Scenario_Misfit -t dtgeo_wf7403_rr:weekly /bin/bash
 
 # Run the docker image (this will automatically start ./detect_event.py)
-docker run -v $(pwd)/TABOO_test:/app/TABOO_waveforms -t dtgeo_wf7403_rr:test 
-docker run -t dtgeo_wf7403_rr:latest
-docker run -t dtgeo_wf7403_rr:test 
+docker run -v $(pwd)/TABOO_test:/app/TABOO_waveforms -v $(pwd)/Scenario_Misfit:/app/Scenario_Misfit -t dtgeo_wf7403_rr:weekly 
 
 docker login -u <username>
 # Use your password (WP) or alternatively a docker personal access token (PAT)
 
 # Set a tag for the image
-docker tag dtgeo_wf7403_rr:latest christadler/dtgeo_wf7403_rr:latest
-docker tag dtgeo_wf7403_rr:test christadler/dtgeo_wf7403_rr:test
+docker tag dtgeo_wf7403_rr:hourly christadler/dtgeo_wf7403_rr:hourly
+docker tag dtgeo_wf7403_rr:weekly christadler/dtgeo_wf7403_rr:weekly
 
 # push the image to hub.docker.com
-docker push christadler/dtgeo_wf7403_rr:latest
-docker push christadler/dtgeo_wf7403_rr:test
+docker push christadler/dtgeo_wf7403_rr:hourly
+docker push christadler/dtgeo_wf7403_rr:weekly
 
 # to simply download the image use
-docker pull christadler/dtgeo_wf7403_rr:latest
-docker pull christadler/dtgeo_wf7403_rr:test
+docker pull christadler/dtgeo_wf7403_rr:hourly
+docker pull christadler/dtgeo_wf7403_rr:weekly
 ```
 
 ## How to use the dockerimage
@@ -72,7 +67,7 @@ For the future we might want to mount the SDL AltoTiberina\_Catalog as a volume,
 
 ```bash
 # if a directory SDL_Catalog_Alternative is available one could mount the catalog as
-docker run -v $(pwd)/SDL_Catalog_Alternative:/app/AltoTiberinaCatalog -v $(pwd)/TABOO_test:/app/TABOO_waveforms -t dtgeo_wf7403_rr:latest
+docker run -v $(pwd)/SDL_Catalog_Alternative:/app/AltoTiberinaCatalog -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms -v $(pwd)/Scenario_Misfit:/app/Scenario_Misfit -t dtgeo_wf7403_rr:hourly
 ```
 
 ### Capture the output

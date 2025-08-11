@@ -17,7 +17,6 @@ s:author:
     s:name: Mathilde Marchandon
 s:codeRepository: https://github.com/christadler/DTGeo_WF7403_CWL/tree/main/Docker
 s:dateCreated: "2026-08-06"
-s:license: https://spdx.org/licenses/Apache-2.0 #TODO: different license?
 s:programmingLanguage: Python
 
 requirements:
@@ -80,13 +79,13 @@ steps:
       baseCommand: ["sh", "-c"]
       hints:
         DockerRequirement:
-          dockerPull: christadler/dtgeo_wf7403_rr:latest
+          dockerPull: christadler/dtgeo_wf7403_rr:weekly
       #Docker run –v $(pwd)/logs:/app/logs --name mein_container mein_image
       #until docker ...; do sleep 60; done
       arguments: ["until docker run \
                    -v $(pwd)/TABOO_waveforms:/app/TABOO_waveforms
-                   -v SDL_AltoTiberina_Catalog:/app/AltoTiberinaCatalog
-                   --name christadler/dtgeo_wf7403_rr:latest \
+                   -v $(pwd)/Scenario_Misfit:/app/Scenario_Misfit
+                   --name christadler/dtgeo_wf7403_rr:weekly \
                    do sleep 60; done "]
       stdout: closest_match.txt
 
