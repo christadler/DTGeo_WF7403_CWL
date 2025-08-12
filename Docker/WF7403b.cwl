@@ -53,7 +53,7 @@ steps:
         Waveforms:
           type: Directory
           outputBinding:
-            glob: "TABOO_waveforms/" #TODO
+            glob: "TABOO_waveforms" #TODO
         Closest_Match:
           type: File
           outputBinding:
