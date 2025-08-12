@@ -34,6 +34,9 @@ The 'Docker' directory also contains an adapted 'detect_event.py' function that 
 After running the workflow the directories 'TABOO_waveforms' and 'Scenario_Misfit' will contain the results. 
 
 'Docker/WF7403b.cwl' is a runnable version of this workflow. Comments show how it could be adapted to be run by a 'listener module'.
+```bash
+cwltool --debug WF7403b.cwl wf-input.yaml
+```
 
 
 ## File Overview

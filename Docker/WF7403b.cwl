@@ -15,10 +15,10 @@ outputs:
     #doc: "Event time."
     #type: string
     #outputSource: ST74030401/Event_Time
-  Waveforms:
-    doc: "Downloaded waveforms."
-    type: Directory
-    outputSource: RapidResponse/Waveforms
+  #Waveforms:
+    #doc: "Downloaded waveforms."
+    #type: Directory
+    #outputSource: RapidResponse/Waveforms
   Closest_Match:
     doc: "OutputFile."
     type: File
@@ -42,7 +42,7 @@ steps:
       arguments: ["docker run \
                    -v ./TABOO_waveforms:/app/TABOO_waveforms \
                    -v ./Scenario_Misfit:/app/Scenario_Misfit \
-                   -t christadler/dtgeo_wf7403_rr:weekly"]
+                   -t christadler/dtgeo_wf7403_rr:hourly"]
       stdout: ./closest_match.txt
 
       inputs:
@@ -50,16 +50,16 @@ steps:
           type: Directory
       outputs:
         #Event_Time: string #we would need to filter this from the output
-        Waveforms:
-          type: Directory
-          outputBinding:
-            glob: "TABOO_waveforms" #TODO
+        #Waveforms:
+          #type: Directory
+          #outputBinding:
+            #glob: "TABOO_waveforms" #TODO
         Closest_Match:
           type: File
           outputBinding:
             glob: closest_match.txt
     out:
       #- Event_Time
-      - Waveforms
+      #- Waveforms
       - Closest_Match
 
